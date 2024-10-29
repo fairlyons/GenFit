@@ -2087,12 +2087,21 @@ double RKTrackRep::estimateStep(const M1x7& state7,
                                 StepLimits& limits) const {
 
   if (useCache_) {
+    if (debugLvl_ > 0) {
+        debugOut<<"useCache_ = True \n";
+    }
     if (cachePos_ >= RKSteps_.size()) {
+      if (debugLvl_ > 0) {
+        debugOut<<"useCache_ set False \n";
+      }
       useCache_ = false;
     }
     else {
       if (RKSteps_.at(cachePos_).limits_.getLowestLimit().first == stp_plane) {
         // we need to step exactly to the plane, so don't use the cache!
+        if (debugLvl_ > 0) {
+          debugOut<<"RKSteps_.erase(RKSteps_.begin() + cachePos_, RKSteps_.end()) \n";
+        }
         useCache_ = false;
         RKSteps_.erase(RKSteps_.begin() + cachePos_, RKSteps_.end());
       }
@@ -2109,7 +2118,9 @@ double RKTrackRep::estimateStep(const M1x7& state7,
   }
 
   limits.setLimit(stp_sMax, 25.); // max. step allowed [cm]
-
+  if (debugLvl_ > 0) {
+    debugOut<<"Set max allowed step \n";
+  }
   if (debugLvl_ > 0) {
     debugOut << " RKTrackRep::estimateStep \n";
     debugOut << "  position:  "; TVector3(state7[0], state7[1], state7[2]).Print();
