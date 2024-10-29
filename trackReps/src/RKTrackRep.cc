@@ -1883,7 +1883,12 @@ bool RKTrackRep::RKutta(const M1x4& SU,
     }
     double beta = 1/hypot(1, mass*state7[6]/charge);
     flightTime += S / beta / 29.9792458; // in ns
-
+    if (debugLvl_ > 0) {
+        debugOut<<"beta = "<<beta<<" \n";
+        debugOut<<"flightTime = "<<flightTime<<" \n";
+        debugOut<<"Way = "<<Way<<" \n";
+        debugOut<<"Wmax = "<<Wmax<<" \n";
+    }
     // check way limit
     if(Way > Wmax){
       std::ostringstream sstream;
