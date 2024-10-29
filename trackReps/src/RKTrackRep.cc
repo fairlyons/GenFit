@@ -1871,11 +1871,16 @@ bool RKTrackRep::RKutta(const M1x4& SU,
 
     M1x3 ABefore = {{ A[0], A[1], A[2] }};
     RKPropagate(state7, jacobianT, SA, S, true, calcOnlyLastRowOfJ); // the actual Runge Kutta propagation
+    if (debugLvl_ > 0) {
+        debugOut<<"Finished RK propagation \n";
+    }
 
     // update paths
     coveredDistance += S;       // add stepsize to way (signed)
     Way  += fabs(S);
-
+    if (debugLvl_ > 0) {
+        debugOut<<"Finished update paths \n";
+    }
     double beta = 1/hypot(1, mass*state7[6]/charge);
     flightTime += S / beta / 29.9792458; // in ns
 
@@ -1887,7 +1892,9 @@ bool RKTrackRep::RKutta(const M1x4& SU,
       exc.setFatal();
       throw exc;
     }
-
+    if (debugLvl_ > 0) {
+        debugOut<<"Finished check way limit \n";
+    }
     if (onlyOneStep) return(true);
 
     // if stepsize has been limited by material, break the loop and return. No linear extrapolation!
@@ -1913,6 +1920,9 @@ bool RKTrackRep::RKutta(const M1x4& SU,
     limits.removeLimit(stp_momLoss);
     limits.removeLimit(stp_boundary);
     limits.removeLimit(stp_plane);
+    if (debugLvl_ > 0) {
+        debugOut<<"Before estimate step \n";
+    }
     S = estimateStep(state7, SU, plane, charge, relMomLoss, limits);
 
     if (debugLvl_ > 0) {
