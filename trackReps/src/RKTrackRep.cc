@@ -1915,6 +1915,11 @@ bool RKTrackRep::RKutta(const M1x4& SU,
     limits.removeLimit(stp_plane);
     S = estimateStep(state7, SU, plane, charge, relMomLoss, limits);
 
+    if (debugLvl_ > 0) {
+        debugOut<<"fabs(S) = "<<fabs(S)<<" \n";
+    }
+
+
     if (limits.getLowestLimit().first == stp_plane &&
         fabs(S) < MINSTEP) {
       if (debugLvl_ > 0) {
